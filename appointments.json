@@ -1,0 +1,22 @@
+[
+  {
+    "appointmentId": "appt_3001",
+    "patientId": "pat_1001",
+    "providerId": "prov_2001",
+    "specialty": "primary_care",
+    "location": "downtown",
+    "daysFromToday": 14,
+    "time": "14:00",
+    "status": "scheduled"
+  },
+  {
+    "appointmentId": "appt_3002",
+    "patientId": "pat_1002",
+    "providerId": "prov_2003",
+    "specialty": "dermatology",
+    "location": "uptown",
+    "daysFromToday": 17,
+    "time": "09:30",
+    "status": "scheduled"
+  }
+]

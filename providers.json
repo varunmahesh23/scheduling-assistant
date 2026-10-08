@@ -1,0 +1,23 @@
+[
+  {
+    "providerId": "prov_2001",
+    "name": "Dr. Elena Brooks",
+    "specialty": "primary_care",
+    "locations": ["downtown", "uptown"],
+    "modalities": ["in_person", "virtual"]
+  },
+  {
+    "providerId": "prov_2002",
+    "name": "Dr. Marcus King",
+    "specialty": "primary_care",
+    "locations": ["downtown"],
+    "modalities": ["in_person"]
+  },
+  {
+    "providerId": "prov_2003",
+    "name": "Dr. Priya Shah",
+    "specialty": "dermatology",
+    "locations": ["uptown"],
+    "modalities": ["in_person"]
+  }
+]

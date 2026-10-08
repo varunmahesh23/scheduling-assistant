@@ -1,0 +1,315 @@
+openapi: 3.0.3
+info:
+  title: Synthetic Scheduling API
+  version: 0.1.0
+  description: Synthetic API contract for an AI appointment scheduling take-home assignment.
+servers:
+  - url: http://localhost:4010
+paths:
+  /patients/search:
+    get:
+      summary: Search patients by phone and date of birth
+      parameters:
+        - name: phone
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: dob
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        "200":
+          description: Matching patients
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  matches:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Patient"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+  /patients/{patientId}/appointments:
+    get:
+      summary: Get appointments for a patient
+      parameters:
+        - name: patientId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Patient appointments
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  appointments:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Appointment"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+  /availability:
+    get:
+      summary: Search appointment availability
+      parameters:
+        - name: patientId
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: specialty
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [primary_care, dermatology]
+        - name: location
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [downtown, uptown, lakeside]
+        - name: startDate
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: endDate
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+      responses:
+        "200":
+          description: Available slots
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  slots:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Slot"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+  /providers:
+    get:
+      summary: Search providers
+      parameters:
+        - name: specialty
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [primary_care, dermatology]
+        - name: location
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [downtown, uptown, lakeside]
+      responses:
+        "200":
+          description: Matching providers
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  providers:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Provider"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+  /appointments:
+    post:
+      summary: Book an appointment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [patientId, slotId, confirmed]
+              properties:
+                patientId:
+                  type: string
+                slotId:
+                  type: string
+                confirmed:
+                  type: boolean
+                  description: Must be true only after explicit user confirmation.
+      responses:
+        "201":
+          description: Appointment booked
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  appointment:
+                    $ref: "#/components/schemas/Appointment"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "409":
+          description: Slot no longer available
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+  /handoffs:
+    post:
+      summary: Create a human handoff request
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [reason, summary]
+              properties:
+                patientId:
+                  type: string
+                reason:
+                  type: string
+                  enum: [user_requested, identity_unclear, unsupported_request, medical_advice, api_failure, no_availability, other]
+                summary:
+                  type: string
+      responses:
+        "201":
+          description: Handoff created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  handoffId:
+                    type: string
+                  status:
+                    type: string
+                    example: queued
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+components:
+  schemas:
+    Patient:
+      type: object
+      properties:
+        patientId:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        dateOfBirth:
+          type: string
+          format: date
+        phone:
+          type: string
+        zipCode:
+          type: string
+        establishedPatient:
+          type: boolean
+    Slot:
+      type: object
+      properties:
+        slotId:
+          type: string
+        providerId:
+          type: string
+        specialty:
+          type: string
+        location:
+          type: string
+        startTime:
+          type: string
+          format: date-time
+        available:
+          type: boolean
+    Provider:
+      type: object
+      properties:
+        providerId:
+          type: string
+        name:
+          type: string
+        specialty:
+          type: string
+        locations:
+          type: array
+          items:
+            type: string
+        modalities:
+          type: array
+          items:
+            type: string
+    Appointment:
+      type: object
+      properties:
+        appointmentId:
+          type: string
+        patientId:
+          type: string
+        providerId:
+          type: string
+        specialty:
+          type: string
+        location:
+          type: string
+        startTime:
+          type: string
+          format: date-time
+        status:
+          type: string
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+  responses:
+    BadRequest:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    ServiceUnavailable:
+      description: Downstream scheduling system unavailable
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"

@@ -1,0 +1,47 @@
+[
+  {
+    "patientId": "pat_1001",
+    "firstName": "Maya",
+    "lastName": "Chen",
+    "dateOfBirth": "1985-04-12",
+    "phone": "555-0101",
+    "zipCode": "70112",
+    "establishedPatient": true
+  },
+  {
+    "patientId": "pat_1002",
+    "firstName": "Jordan",
+    "lastName": "Lee",
+    "dateOfBirth": "1992-06-03",
+    "phone": "555-0102",
+    "zipCode": "70118",
+    "establishedPatient": true
+  },
+  {
+    "patientId": "pat_1003",
+    "firstName": "Avery",
+    "lastName": "Patel",
+    "dateOfBirth": "1978-09-22",
+    "phone": "555-0130",
+    "zipCode": "70115",
+    "establishedPatient": true
+  },
+  {
+    "patientId": "pat_1004",
+    "firstName": "Avery",
+    "lastName": "Patel",
+    "dateOfBirth": "1978-09-22",
+    "phone": "555-0130",
+    "zipCode": "70005",
+    "establishedPatient": true
+  },
+  {
+    "patientId": "pat_1005",
+    "firstName": "Sam",
+    "lastName": "Rivera",
+    "dateOfBirth": "2001-11-09",
+    "phone": "555-0105",
+    "zipCode": "70130",
+    "establishedPatient": false
+  }
+]

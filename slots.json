@@ -1,0 +1,39 @@
+[
+  {
+    "slotId": "slot_4001",
+    "providerId": "prov_2001",
+    "specialty": "primary_care",
+    "location": "downtown",
+    "daysFromToday": 7,
+    "time": "09:00",
+    "available": true
+  },
+  {
+    "slotId": "slot_4002",
+    "providerId": "prov_2002",
+    "specialty": "primary_care",
+    "location": "downtown",
+    "daysFromToday": 7,
+    "time": "11:00",
+    "available": true
+  },
+  {
+    "slotId": "slot_4003",
+    "providerId": "prov_2001",
+    "specialty": "primary_care",
+    "location": "uptown",
+    "daysFromToday": 8,
+    "time": "15:30",
+    "available": true
+  },
+  {
+    "slotId": "slot_conflict_001",
+    "providerId": "prov_2002",
+    "specialty": "primary_care",
+    "location": "downtown",
+    "daysFromToday": 8,
+    "time": "08:30",
+    "available": true,
+    "conflictOnBooking": true
+  }
+]
